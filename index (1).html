@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.95.1/css/materialize.min.css">
+    <style>
+
+        .overlay {
+            height: 100%;
+            width: 100%;
+            display: none;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0, 0.95);
+        }
+
+        .overlay-content {
+            position: relative;
+            top: 35%;
+            width: 100%;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .overlay .result {
+            padding: 10px;
+            text-decoration: none;
+            font-size:40px;
+            color: #f1f1f1;
+            display: block;
+            /* transition: 0.5s; */
+            animation: .5s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        
+
+        .overlay .closebtn {
+            position: absolute;
+            top: 20px;
+            right: 45px;
+            font-size: 3.5em;
+            color:#f1f1f1;
+            text-decoration:none;
+        }
+
+        .overlay .closebtn:hover {
+            
+            
+            color:#ffcd01;
+            text-decoration:none;
+        }
+
+        .main-container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            padding: 20px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            margin-left: 100px;
+            margin-right: 100px;
+            height: 200px;
+            
+            
+        }
+
+        button {
+            background-color: #009dff; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.5em;
+            margin:30px;
+            border-radius: 15px;
+        }
+        button:hover {
+            background-color: #ffcd01; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.5em;
+            margin:30px;
+            border-radius: 15px;
+        }
+
+        h2{
+            font-size: 2.5em;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="myNav" class="overlay">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="overlay-content">
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+    <div class="main-container">
+        <h2>Motivational Quotes</h2>
+
+        <button onclick="openNav()"><b>SEE ME</b></button>
+    </div>
+    <script>
+       
+            function speak(text, voice, rate, pitch, volume) {
+        //create a SpeechSynthesisUtterance to configure the how text to be spoken 
+            let speakData = new SpeechSynthesisUtterance("");
+            speakData.volume = volume; // From 0 to 1
+            speakData.rate = rate; // From 0.1 to 10
+            speakData.pitch = pitch; // From 0 to 2
+            speakData.text = text;
+            speakData.lang = 'en';
+            speakData.voice = voice;
+            speechSynthesis.speak(speakData);
+
+        }
+
+        function openNav() {
+            document.getElementById("myNav").style.display = "block";
+            fetch("https://type.fit/api/quotes")
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                //0-1500
+                var a= Math.floor(Math.random() * 1500);
+                // console.log(data[a].text);
+                var b = data[a].text;
+                rate = 0.5; pitch = 1.5, volume = 1;
+                speak(b, undefined, rate, pitch, volume );
+                document.getElementById("result").innerHTML=b;
+            });
+
+        }
+           
+
+        function closeNav() {
+            document.getElementById("myNav").style.display = "none";
+            // text.pause();
+        }
+    </script>
+            
+</body>
+</html>
